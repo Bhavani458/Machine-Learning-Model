@@ -16,7 +16,9 @@ models = {
     'HELOC ROI': 'heloc_model.pkl',
     'Reverse Mortgage': 'RM_model.pkl',
     'Unison': 'Unison_model.pkl',
-    'Point': 'Point_model.pkl'
+    'Point': 'Point_model.pkl',
+    'Haus':'Haus_model.pkl'
+    #'Homium':'Homium_model.pkl'
 }
 
 # Streamlit app title
@@ -76,6 +78,16 @@ if model:
             'HEI Opportunity': [hei_opportunity],
             'Mortgage Balance': [mortgage_balance],  # Corrected typo
             'Point_Buyout_10yr': [point_buyout],
+            'Vesta_Buyout_10yr': [vesta_buyout]
+        })
+    elif model_choice == "Haus":
+        haus_buyout = st.number_input('Haus Buyout (10 years)', value=70000)
+        new_data = pd.DataFrame({
+            'Estimated_Value': [estimated_value],
+            'Equity_Value': [equity_value],
+            'HEI Opportunity': [hei_opportunity],
+            'Mortgage Balance': [mortgage_balance],  # Corrected typo
+            'Haus_Buyout_10yr': [haus_buyout],
             'Vesta_Buyout_10yr': [vesta_buyout]
         })
 
