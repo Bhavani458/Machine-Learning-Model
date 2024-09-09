@@ -10,7 +10,7 @@ def load_model(model_name):
 # Dictionary of available models
 models = {
     'HELOC ROI': 'heloc_model.pkl',
-    'Reverse Mortgage': 'RM_Vesta.pkl',
+    'Reverse Mortgage': 'RM_Vesta.pkl'
     #'Unison':'Unison_Vesta.pkl',
     #'Point':'Point_Vesta.pkl',
     #'Haus':'Haus_Vesta.pkl',
