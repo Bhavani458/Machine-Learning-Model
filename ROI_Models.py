@@ -24,6 +24,21 @@ models = {
 # Streamlit app title
 st.title("ROI Prediction for Different Competitors")
 
+# Background information
+st.markdown("""
+    ### Welcome to the Home Equity Investment (HEI) ROI Prediction Tool!
+    Use this tool to predict the potential return on investment(ROI) between **Vesta** and different home equity investment options like:
+    - **HELOC**
+    - **Reverse Mortgage**
+    - **Unison**
+    - **Point**
+    - **Haus**
+    - **Homium**
+    
+    Select a competitor from the dropdown, enter the relevant details, and click **Predict** to get the estimated ROI.
+""")
+
+
 # Model selection
 model_choice = st.selectbox("Select Model", list(models.keys()))
 
@@ -103,8 +118,17 @@ if model:
     # Predict ROI based on the selected model
     if st.button('Predict'):
         try:
-            prediction = model.predict(new_data.values)  # Ensure .values is used
-            st.write(f"Predicted ROI for Vesta and {model_choice}: {prediction[0]}")
+            prediction = model.predict(new_data.values)
+            st.success(f"Predicted ROI for Vesta and {model_choice}: ${prediction[0]:,.2f}")
+
+            # Display the input data
+            st.subheader("Input Data:")
+            st.write(new_data)
+
+            # Add a simple bar chart visualization (if applicable)
+            st.subheader("Visualization of Key Metrics:")
+            st.bar_chart(new_data[['Estimated_Value', 'Equity_Value', 'HEI Opportunity', 'Mortgage Balance']])
+
         except Exception as e:
             st.error(f"Error during prediction: {str(e)}")
 else:
