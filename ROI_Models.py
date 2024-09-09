@@ -15,8 +15,8 @@ def load_model(model_name):
 models = {
     'HELOC ROI': 'heloc_model.pkl',
     'Reverse Mortgage': 'RM_model.pkl',
-    'Unison':'Unison_model.pkl'
-    # 'Point':'Point_model.pkl',
+    'Unison':'Unison_model.pkl',
+    'Point':'Point_model.pkl'
     # 'Haus':'Haus_model.pkl',
     # 'Homium':'Homium_model.pkl',
 }
