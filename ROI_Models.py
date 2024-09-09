@@ -17,8 +17,8 @@ models = {
     'Reverse Mortgage': 'RM_model.pkl',
     'Unison': 'Unison_model.pkl',
     'Point': 'Point_model.pkl',
-    'Haus':'Haus_model.pkl'
-    #'Homium':'Homium_model.pkl'
+    'Haus':'Haus_model.pkl',
+    'Homium':'Homium_model.pkl'
 }
 
 # Streamlit app title
@@ -90,7 +90,17 @@ if model:
             'Haus_Buyout_10yr': [haus_buyout],
             'Vesta_Buyout_10yr': [vesta_buyout]
         })
-
+    elif model_choice == "Haus":
+        homium_buyout = st.number_input('Homium Buyout (10 years)', value=70000)
+        new_data = pd.DataFrame({
+            'Estimated_Value': [estimated_value],
+            'Equity_Value': [equity_value],
+            'HEI Opportunity': [hei_opportunity],
+            'Mortgage Balance': [mortgage_balance],  # Corrected typo
+            'Homium_Buyout_10yr': [homium_buyout],
+            'Vesta_Buyout_10yr': [vesta_buyout]
+        })
+    
     # Predict ROI based on the selected model
     if st.button('Predict'):
         try:
