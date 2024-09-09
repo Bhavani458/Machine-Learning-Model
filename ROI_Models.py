@@ -15,10 +15,8 @@ def load_model(model_name):
 models = {
     'HELOC ROI': 'heloc_model.pkl',
     'Reverse Mortgage': 'RM_model.pkl',
-    'Unison':'Unison_model.pkl',
-    'Point':'Point_model.pkl'
-    # 'Haus':'Haus_model.pkl',
-    # 'Homium':'Homium_model.pkl',
+    'Unison': 'Unison_model.pkl',
+    'Point': 'Point_model.pkl'
 }
 
 # Streamlit app title
@@ -36,7 +34,7 @@ if model:
     estimated_value = st.number_input('Estimated Value', value=1000000)
     equity_value = st.number_input('Equity Value', value=800000)
     hei_opportunity = st.number_input('HEI Opportunity', value=50000)
-    mortgage_balance = st.number_input('Morgage Balance', value=400000)
+    mortgage_balance = st.number_input('Mortgage Balance', value=400000)  # Correct typo
     vesta_buyout = st.number_input('Vesta Buyout (10 years)', value=70000)
 
     # Adjust input fields based on the selected model
@@ -46,7 +44,7 @@ if model:
             'Estimated_Value': [estimated_value],
             'Equity_Value': [equity_value],
             'HEI Opportunity': [hei_opportunity],
-            'Morgage Balance': [mortgage_balance],
+            'Mortgage Balance': [mortgage_balance],  # Corrected typo
             'HELOC_Cost_10yr': [heloc_cost],
             'Vesta_Buyout_10yr': [vesta_buyout]
         })
@@ -56,7 +54,7 @@ if model:
             'Estimated_Value': [estimated_value],
             'Equity_Value': [equity_value],
             'HEI Opportunity': [hei_opportunity],
-            'Morgage Balance': [mortgage_balance],
+            'Mortgage Balance': [mortgage_balance],  # Corrected typo
             'Reverse_Mortgage_Cost_10yr': [reverse_mortgage_cost],
             'Vesta_Buyout_10yr': [vesta_buyout]
         })
@@ -66,15 +64,27 @@ if model:
             'Estimated_Value': [estimated_value],
             'Equity_Value': [equity_value],
             'HEI Opportunity': [hei_opportunity],
-            'Morgage Balance': [mortgage_balance],
+            'Mortgage Balance': [mortgage_balance],  # Corrected typo
             'Unison_Buyout_10yr': [unison_buyout],
+            'Vesta_Buyout_10yr': [vesta_buyout]
+        })
+    elif model_choice == "Point":
+        point_buyout = st.number_input('Point Buyout (10 years)', value=70000)
+        new_data = pd.DataFrame({
+            'Estimated_Value': [estimated_value],
+            'Equity_Value': [equity_value],
+            'HEI Opportunity': [hei_opportunity],
+            'Mortgage Balance': [mortgage_balance],  # Corrected typo
+            'Point_Buyout_10yr': [point_buyout],
             'Vesta_Buyout_10yr': [vesta_buyout]
         })
 
     # Predict ROI based on the selected model
     if st.button('Predict'):
-        prediction = model.predict(new_data)
-        st.write(f"Predicted ROI for {model_choice}: {prediction[0]}")
-
+        try:
+            prediction = model.predict(new_data.values)  # Ensure .values is used
+            st.write(f"Predicted ROI for Vesta and {model_choice}: {prediction[0]}")
+        except Exception as e:
+            st.error(f"Error during prediction: {str(e)}")
 else:
     st.error("Failed to load model. Please check the model file or path.")
