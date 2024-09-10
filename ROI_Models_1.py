@@ -155,6 +155,7 @@ if competitor_model:
                 st.subheader(f"Vesta and {model_choice} ROI Prediction")
                 st.success(f"Predicted ROI for Vesta & {model_choice}: {competitor_roi:.2f}")
                 st.write(f"***Predicted ROI is the difference between costs associated with {model_choice} and Vesta***")
+                st.write(f"{model_choice} Buyout (10 years): ${competitor_buyout_10yr:,.2f}")
                 st.write("**Input Data:**")
                 st.write(competitor_data)
             
