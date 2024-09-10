@@ -145,9 +145,9 @@ if competitor_model:
                 st.write("***ROI for vesta is the difference between Appreciated home value in 10yrs and Vesta Buyout in 10yrs***")
                 st.write(f"Vesta Buyout (10 years): ${vesta_buyout_10yr:,.2f}")
             with col2:
-                st.subheader(f"{model_choice} ROI Prediction")
+                st.subheader(f"{model_choice} Prediction")
                 st.success(f"Predicted ROI for Vesta & {model_choice}: {competitor_roi:.2f}")
-                st.write(f"***Predicted ROI is the difference between costs associated with {model_choice} and Vesta***")
+                st.write(f"***Predicted ROI is the difference between costs associated with {model_choice.str.split()[0]} and Vesta***")
                 st.write("**Input Data:**")
                 st.write(competitor_data)
             
