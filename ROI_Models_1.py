@@ -64,13 +64,18 @@ if competitor_model:
     
     # Validate that estimated value is greater than or equal to equity value
     if estimated_value < equity_value:
-        st.error("Error: Estimated Property Value should be greater than or equal to Equity Value.")
+        try:
+            st.error("Error: Estimated Property Value should be greater than or equal to Equity Value.")
+        except Exception as e:
+            st.error("Cannot proceed further")
     elif mortgage_balance > equity_value:
-        st.error("Error: Mortgage Balance should be less than or equal to Equity Value.")
+        try:
+            st.error("Error: Mortgage Balance should be less than or equal to Equity Value.")
+        except Exception as e:
+            st.error("Cannot proceed further")
     else:
         # Access type selection
         access_type = st.selectbox('Select Access Type', ['Equity Access', 'Mortgage Exit'])
-        
         # Calculate HEI Opportunity based on access type
         if access_type == 'Equity Access':
             hei_opportunity = (percent_equity_access / 100) * equity_value
