@@ -146,7 +146,7 @@ if model:
 
             # Set the title and layout for the chart
             fig.update_layout(
-                title_text="Visualization of Key Metrics including Predicted ROI",
+                title_text="Visualization of Key Metrics and Predicted ROI",
                 annotations=[dict(text='ROI', x=0.5, y=0.5, font_size=20, showarrow=False)]
             )
 
