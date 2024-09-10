@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import pickle
-import matplotlib.pyplot as plt
+import numpy as np
 import plotly.graph_objects as go
 
 # Custom CSS to change the background color
@@ -71,32 +71,37 @@ if competitor_model:
     else:
         hei_opportunity = 0
     
+    # Display the calculated HEI Opportunity
+    st.write(f"Calculated HEI Opportunity: ${hei_opportunity:,.2f}")
+    
     # Static calculation for Vesta Buyout (10 years)
     vesta_buyout_10yr = ((1 - 0.15) * estimated_value) * (1 + 0.04) ** 10
     
-    # Static Vesta ROI calculation (this is a placeholder, modify based on your static calculation)
-    vesta_roi = vesta_buyout_10yr / estimated_value * 100  # Example formula
-
-    # Function to calculate competitor buyout based on competitor
-    def calculate_competitor_buyout(competitor, estimated_value):
+    # Function to calculate competitor buyout based on formulas provided
+    def calculate_competitor_buyout(competitor, estimated_value, hei_opportunity, equity_percent):
         if competitor == 'HELOC ROI':
-            competitor_buyout_10yr = estimated_value * (1 + 0.05) ** 10  # Example formula
+            rate = 0.11 / 12
+            nper = 10 * 12
+            competitor_buyout_10yr = np.pmt(rate, nper, -hei_opportunity) * 120  # Formula for HELOC
         elif competitor == 'Reverse Mortgage':
-            competitor_buyout_10yr = estimated_value * (1 + 0.03) ** 10
+            rate = 0.0806 / 12
+            nper = 10 * 12
+            competitor_buyout_10yr = np.fv(rate, nper, 0, -hei_opportunity)  # Formula for Reverse Mortgage
         elif competitor == 'Unison':
-            competitor_buyout_10yr = estimated_value * (1 + 0.045) ** 10
+            competitor_buyout_10yr = (4 * equity_percent) * (((1 - 0.05) * estimated_value) * (1 + 0.04) ** 10) + hei_opportunity  # Unison formula
         elif competitor == 'Point':
-            competitor_buyout_10yr = estimated_value * (1 + 0.04) ** 10
+            competitor_buyout_10yr = (equity_percent) * (((1 - 0.29) * estimated_value) * (1 + 0.04) ** 10) + hei_opportunity  # Point formula
         elif competitor == 'Haus':
-            competitor_buyout_10yr = estimated_value * (1 + 0.035) ** 10
+            competitor_buyout_10yr = (equity_percent) * (((1 - 0.20) * estimated_value) * (1 + 0.04) ** 10) + hei_opportunity - (120 * (0.01 * hei_opportunity))  # Haus formula
         elif competitor == 'Homium':
-            competitor_buyout_10yr = estimated_value * (1 + 0.05) ** 10
+            competitor_buyout_10yr = (equity_percent) * ((estimated_value) * (1 + 0.04) ** 10) + hei_opportunity  # Homium formula
         else:
             competitor_buyout_10yr = 0
         return competitor_buyout_10yr
 
-    # Calculate competitor buyout
-    competitor_buyout_10yr = calculate_competitor_buyout(model_choice, estimated_value)
+    # Calculate competitor buyout using the provided formulas
+    equity_percent = percent_equity_access / 100
+    competitor_buyout_10yr = calculate_competitor_buyout(model_choice, estimated_value, hei_opportunity, equity_percent)
     
     # Prepare data for competitor model
     competitor_data = pd.DataFrame({
@@ -114,6 +119,9 @@ if competitor_model:
             # Competitor prediction
             competitor_prediction = competitor_model.predict(competitor_data.values)
             competitor_roi = competitor_prediction[0]
+            
+            # Static Vesta ROI calculation (this is a placeholder, modify based on your static calculation)
+            vesta_roi = vesta_buyout_10yr / estimated_value * 100  # Example formula
             
             # Display predictions side by side
             col1, col2 = st.columns(2)
@@ -136,7 +144,7 @@ if competitor_model:
                 values = [estimated_value, equity_value, hei_opportunity, mortgage_balance, vesta_roi]
                 fig_vesta = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.3)])
                 fig_vesta.update_layout(
-                    title_text="Vesta Metrics and ROI",
+                    title_text="Vesta Metrics and Static ROI",
                     annotations=[dict(text='Vesta', x=0.5, y=0.5, font_size=20, showarrow=False)]
                 )
                 st.plotly_chart(fig_vesta)
