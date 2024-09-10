@@ -150,12 +150,12 @@ if competitor_model:
                 st.subheader("Vesta ROI Prediction")
                 st.success(f"ROI for Vesta: {vesta_roi:.2f}")
                 st.write("***ROI for vesta is the difference between Appreciated home value in 10yrs and Vesta Buyout in 10yrs***")
-                st.markdown(f"<span style='background-color:dark-grey'>Vesta Buyout (10 years): ${vesta_buyout_10yr:,.2f}</span>", unsafe_allow_html=True)
+                st.markdown(f"<span style='font-size:20px; font-weight:bold; color:red'>Vesta Buyout (10 years): ${vesta_buyout_10yr:,.2f}</span>", unsafe_allow_html=True)
             with col2:
                 st.subheader(f"Vesta and {model_choice} ROI Prediction")
                 st.success(f"Predicted ROI for Vesta & {model_choice}: {competitor_roi:.2f}")
                 st.write(f"***Predicted ROI is the difference between costs associated with {model_choice} and Vesta***")
-                st.markdown(f"<span style='background-color:dark-grey'>{model_choice} Buyout (10 years): ${competitor_buyout_10yr:,.2f}</span>", unsafe_allow_html=True)
+                st.markdown(f"<span style='font-size:20px; font-weight:bold; color:red'>{model_choice} Buyout (10 years): ${competitor_buyout_10yr:,.2f}</span>", unsafe_allow_html=True)
                 st.write("**Input Data:**")
                 st.write(competitor_data)
             
