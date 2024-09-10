@@ -175,10 +175,10 @@ if competitor_model:
                 st.plotly_chart(fig_vesta)
             # Competitor Bar Chart
             with col2:
-                labels = ['Estimated Value', 'Equity Value', 'HEI Opportunity', 'Mortgage Balance', 'Predicted ROI']
-                values = [estimated_value, equity_value, hei_opportunity, mortgage_balance, competitor_roi]
-                # Create a bar chart for the competitor
-                fig_competitor = px.bar(
+                labels = [f'{model_choice} and Vesta Predicted ROI']
+                values = [competitor_roi]
+                # Create a pie chart for the competitor roi
+                fig_competitor = px.pie(
                     x=labels, 
                     y=values, 
                     labels={'x': 'Metrics', 'y': 'Values ($)'}, 
