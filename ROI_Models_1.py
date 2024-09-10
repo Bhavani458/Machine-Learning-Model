@@ -64,6 +64,8 @@ if competitor_model:
     # Validate that estimated value is greater than or equal to equity value
     if estimated_value < equity_value:
         st.error("Error: Estimated Property Value should be greater than or equal to Equity Value.")
+    elif mortgage_balance > equity_value:
+        st.error("Error: Mortgage Balance should be less than or equal to Equity Value.")
     else:
         # Access type selection
         access_type = st.selectbox('Select Access Type', ['Equity Access', 'Mortgage Exit'])
@@ -147,7 +149,7 @@ if competitor_model:
             with col2:
                 st.subheader(f"{model_choice} Prediction")
                 st.success(f"Predicted ROI for Vesta & {model_choice}: {competitor_roi:.2f}")
-                st.write(f"***Predicted ROI is the difference between costs associated with {model_choice.str.split()[0]} and Vesta***")
+                st.write(f"***Predicted ROI is the difference between costs associated with {model_choice.split()[0]} and Vesta***")
                 st.write("**Input Data:**")
                 st.write(competitor_data)
             
