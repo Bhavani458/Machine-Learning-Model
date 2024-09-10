@@ -9,7 +9,7 @@ def set_background_color():
         """
         <style>
         .stApp {
-            background-color: #f0f0f5;  /* Light gray background */
+            background-color: #db6443;  /* Copper red */
         }
         </style>
         """,
