@@ -144,7 +144,7 @@ if competitor_model:
                 st.write(f"Vesta Buyout (10 years): ${vesta_buyout_10yr:,.2f}")
             with col2:
                 st.subheader(f"{model_choice} ROI Prediction")
-                st.success(f"Predicted ROI for {model_choice}: {competitor_roi:.2f}")
+                st.success(f"Predicted ROI for Vesta & {model_choice}: {competitor_roi:.2f}")
                 st.write("**Input Data (Competitor):**")
                 st.write(competitor_data)
             
@@ -152,7 +152,7 @@ if competitor_model:
             st.subheader("Visualization of Key Metrics")
             col1, col2 = st.columns(2)
             with col1:
-                labels = ['Estimated Value', 'Equity Value', 'HEI Opportunity', 'Mortgage Balance', 'Predicted ROI']
+                labels = ['Estimated Value', 'Equity Value', 'HEI Opportunity', 'Mortgage Balance', 'Vesta ROI']
                 values = [estimated_value, equity_value, hei_opportunity, mortgage_balance, vesta_roi]
                 fig_vesta = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.3)])
                 fig_vesta.update_layout(
@@ -161,6 +161,7 @@ if competitor_model:
                 )
                 st.plotly_chart(fig_vesta)
             with col2:
+                labels = ['Estimated Value', 'Equity Value', 'HEI Opportunity', 'Mortgage Balance', 'Predcited ROI']
                 values = [estimated_value, equity_value, hei_opportunity, mortgage_balance, competitor_roi]
                 fig_competitor = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.3)])
                 fig_competitor.update_layout(
