@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import pickle
 import numpy as np
+import numpy_financial as npf
 import plotly.graph_objects as go
 
 # Custom CSS to change the background color
@@ -77,26 +78,36 @@ if competitor_model:
     # Static calculation for Vesta Buyout (10 years)
     vesta_buyout_10yr = ((1 - 0.15) * estimated_value) * (1 + 0.04) ** 10
     
-    # Function to calculate competitor buyout based on formulas provided
     def calculate_competitor_buyout(competitor, estimated_value, hei_opportunity, equity_percent):
-        if competitor == 'HELOC ROI':
-            rate = 0.11 / 12
-            nper = 10 * 12
-            competitor_buyout_10yr = np.pmt(rate, nper, -hei_opportunity) * 120  # Formula for HELOC
-        elif competitor == 'Reverse Mortgage':
-            rate = 0.0806 / 12
-            nper = 10 * 12
-            competitor_buyout_10yr = np.fv(rate, nper, 0, -hei_opportunity)  # Formula for Reverse Mortgage
-        elif competitor == 'Unison':
-            competitor_buyout_10yr = (4 * equity_percent) * (((1 - 0.05) * estimated_value) * (1 + 0.04) ** 10) + hei_opportunity  # Unison formula
-        elif competitor == 'Point':
-            competitor_buyout_10yr = (equity_percent) * (((1 - 0.29) * estimated_value) * (1 + 0.04) ** 10) + hei_opportunity  # Point formula
-        elif competitor == 'Haus':
-            competitor_buyout_10yr = (equity_percent) * (((1 - 0.20) * estimated_value) * (1 + 0.04) ** 10) + hei_opportunity - (120 * (0.01 * hei_opportunity))  # Haus formula
-        elif competitor == 'Homium':
-            competitor_buyout_10yr = (equity_percent) * ((estimated_value) * (1 + 0.04) ** 10) + hei_opportunity  # Homium formula
-        else:
+        try:
+            # Ensure numeric types for all values
+            estimated_value = float(estimated_value)
+            hei_opportunity = float(hei_opportunity)
+            equity_percent = float(equity_percent)
+
+            # Competitor-specific formulas
+            if competitor == 'HELOC ROI':
+                rate = 0.11 / 12
+                nper = 10 * 12
+                competitor_buyout_10yr = npf.pmt(rate, nper, -hei_opportunity) * 120  # Formula for HELOC
+            elif competitor == 'Reverse Mortgage':
+                rate = 0.0806 / 12
+                nper = 10 * 12
+                competitor_buyout_10yr = npf.fv(rate, nper, 0, -hei_opportunity)  # Formula for Reverse Mortgage
+            elif competitor == 'Unison':
+                competitor_buyout_10yr = (4 * equity_percent) * (((1 - 0.05) * estimated_value) * (1 + 0.04) ** 10) + hei_opportunity  # Unison formula
+            elif competitor == 'Point':
+                competitor_buyout_10yr = (equity_percent) * (((1 - 0.29) * estimated_value) * (1 + 0.04) ** 10) + hei_opportunity  # Point formula
+            elif competitor == 'Haus':
+                competitor_buyout_10yr = (equity_percent) * (((1 - 0.20) * estimated_value) * (1 + 0.04) ** 10) + hei_opportunity - (120 * (0.01 * hei_opportunity))  # Haus formula
+            elif competitor == 'Homium':
+                competitor_buyout_10yr = (equity_percent) * ((estimated_value) * (1 + 0.04) ** 10) + hei_opportunity  # Homium formula
+            else:
+                competitor_buyout_10yr = 0
+        except ValueError:
+            st.error("Input values must be numeric.")
             competitor_buyout_10yr = 0
+
         return competitor_buyout_10yr
 
     # Calculate competitor buyout using the provided formulas
