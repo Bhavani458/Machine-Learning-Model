@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import pickle
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 
 # Custom CSS to change the background color
 def set_background_color():
@@ -135,15 +136,22 @@ if model:
             st.subheader("Input Data:")
             st.write(new_data)
 
-            # Visualization with Pie Chart including the Predicted Value
+            # Visualization with Pie Chart using Plotly including the Predicted Value
             st.subheader("Visualization of Key Metrics:")
-            fig, ax = plt.subplots()
             labels = ['Estimated Value', 'Equity Value', 'HEI Opportunity', 'Mortgage Balance', 'Predicted ROI']
             values = [estimated_value, equity_value, hei_opportunity, mortgage_balance, predicted_value]
-            ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
-            ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-            st.pyplot(fig)
 
+            # Create a Pie chart using Plotly
+            fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.3)])
+
+            # Set the title and layout for the chart
+            fig.update_layout(
+                title_text="Visualization of Key Metrics including Predicted ROI",
+                annotations=[dict(text='ROI', x=0.5, y=0.5, font_size=20, showarrow=False)]
+            )
+
+            # Display the plot in Streamlit
+            st.plotly_chart(fig)
         except Exception as e:
             st.error(f"Error during prediction: {str(e)}")
 else:
