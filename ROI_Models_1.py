@@ -32,11 +32,11 @@ def load_model(model_name):
 # Dictionary of available competitor models
 models = {
     'HELOC ROI': 'heloc_model.pkl',
-    'Reverse Mortgage': 'reverse_mortgage_model.pkl',
-    'Unison': 'unison_model.pkl',
-    'Point': 'point_model.pkl',
-    'Haus': 'haus_model.pkl',
-    'Homium': 'homium_model.pkl'
+    'Reverse Mortgage': 'RM_model.pkl',
+    'Unison': 'Unison_model.pkl',
+    'Point': 'Point_model.pkl',
+    'Haus': 'Haus_model.pkl',
+    'Homium': 'Homium_model.pkl'
 }
 
 # Streamlit app title and description
