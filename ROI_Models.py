@@ -23,7 +23,7 @@ models = {
 }
 
 # Streamlit app title
-st.title("Vesta ROI Prediction for Different Competitors")
+st.title("Vesta ROI Prediction for Various Competitors")
 
 # Background information
 st.markdown("""
