@@ -130,7 +130,7 @@ if competitor_model:
         try:
             # Competitor prediction
             competitor_prediction = competitor_model.predict(competitor_data.values)
-            competitor_roi = pd.to_numeric(competitor_prediction[0])
+            competitor_roi = competitor_prediction[0]
             
             # Static Vesta ROI calculation (this is a placeholder, modify based on your static calculation)
             vesta_roi = vesta_appreciated_10yr - vesta_buyout_10yr
@@ -138,13 +138,13 @@ if competitor_model:
             # Display predictions side by side
             col1, col2 = st.columns(2)
             with col1:
-                st.subheader("Vesta ROI Prediction (Static)")
-                st.success(f"Static ROI for Vesta: {vesta_roi:.2f}%")
+                st.subheader("Vesta ROI Prediction")
+                st.success(f"ROI for Vesta: {vesta_roi:.2f}")
                 st.write("**Input Data (Vesta):**")
                 st.write(f"Vesta Buyout (10 years): ${vesta_buyout_10yr:,.2f}")
             with col2:
                 st.subheader(f"{model_choice} ROI Prediction")
-                st.success(f"Predicted ROI for {model_choice}: {competitor_roi:.2f}%")
+                st.success(f"Predicted ROI for {model_choice}: {competitor_roi:.2f}")
                 st.write("**Input Data (Competitor):**")
                 st.write(competitor_data)
             
