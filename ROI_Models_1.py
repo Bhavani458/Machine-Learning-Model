@@ -4,6 +4,7 @@ import pickle
 import numpy as np
 import numpy_financial as npf
 import plotly.graph_objects as go
+import plotly.express as px
 
 # Custom CSS to change the background color
 def set_background_color():
@@ -91,7 +92,7 @@ if competitor_model:
             equity_percent = float(equity_percent)
 
             # Competitor-specific formulas
-            if competitor == 'HELOC ROI':
+            if competitor == 'HELOC':
                 rate = 0.11 / 12
                 nper = 10 * 12
                 competitor_buyout_10yr = npf.pmt(rate, nper, -hei_opportunity) * 120  # Formula for HELOC
@@ -128,7 +129,6 @@ if competitor_model:
         f"{model_choice}_Buyout_10yr": [competitor_buyout_10yr],
         'Vesta_Buyout_10yr': [vesta_buyout_10yr]
     })
-    
     # Predict and display results
     if st.button('Predict'):
         try:
@@ -156,22 +156,38 @@ if competitor_model:
             # Visualization side by side
             st.subheader("Visualization of Key Metrics")
             col1, col2 = st.columns(2)
+            # Vesta Bar Chart
             with col1:
                 labels = ['Estimated Value', 'Equity Value', 'HEI Opportunity', 'Mortgage Balance', 'Vesta ROI']
                 values = [estimated_value, equity_value, hei_opportunity, mortgage_balance, vesta_roi]
-                fig_vesta = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.3)])
+                # Create a bar chart for Vesta
+                fig_vesta = px.bar(
+                    x=labels, 
+                    y=values, 
+                    labels={'x': 'Metrics', 'y': 'Values ($)'}, 
+                    title="Vesta Metrics and ROI"
+                )
                 fig_vesta.update_layout(
-                    title_text="Vesta Metrics and ROI",
-                    annotations=[dict(text='Vesta', x=0.5, y=0.5, font_size=20, showarrow=False)]
+                    title_text="Vesta Metrics and ROI", 
+                    xaxis_title="Metrics", 
+                    yaxis_title="Values ($)"
                 )
                 st.plotly_chart(fig_vesta)
+            # Competitor Bar Chart
             with col2:
-                labels = ['Estimated Value', 'Equity Value', 'HEI Opportunity', 'Mortgage Balance', 'Predcited ROI']
+                labels = ['Estimated Value', 'Equity Value', 'HEI Opportunity', 'Mortgage Balance', 'Predicted ROI']
                 values = [estimated_value, equity_value, hei_opportunity, mortgage_balance, competitor_roi]
-                fig_competitor = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.3)])
+                # Create a bar chart for the competitor
+                fig_competitor = px.bar(
+                    x=labels, 
+                    y=values, 
+                    labels={'x': 'Metrics', 'y': 'Values ($)'}, 
+                    title=f"{model_choice} Metrics and Predicted ROI"
+                )
                 fig_competitor.update_layout(
-                    title_text=f"{model_choice} Metrics and Predicted ROI",
-                    annotations=[dict(text=model_choice, x=0.5, y=0.5, font_size=20, showarrow=False)]
+                    title_text=f"{model_choice} Metrics and Predicted ROI", 
+                    xaxis_title="Metrics", 
+                    yaxis_title="Values ($)"
                 )
                 st.plotly_chart(fig_competitor)
         except Exception as e:
