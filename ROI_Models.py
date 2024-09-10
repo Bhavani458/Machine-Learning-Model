@@ -112,6 +112,7 @@ if model:
     if st.button('Predict'):
         try:
             prediction = model.predict(new_data.values)
+            predicted_value = prediction[0]
             st.success(f"Predicted ROI for Vesta and {model_choice}: ${prediction[0]:,.2f}")
 
             # Display the input data
