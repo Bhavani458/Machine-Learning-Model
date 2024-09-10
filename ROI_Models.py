@@ -3,6 +3,22 @@ import pandas as pd
 import pickle
 import matplotlib.pyplot as plt
 
+# Custom CSS to change the background color
+def set_background_color():
+    st.markdown(
+        """
+        <style>
+        .stApp {
+            background-color: #f0f0f5;  /* Light gray background */
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Call the function to apply the custom background color
+set_background_color()
+
 # Load the trained models
 def load_model(model_name):
     try:
