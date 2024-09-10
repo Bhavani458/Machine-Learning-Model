@@ -39,9 +39,6 @@ models = {
     'Homium': 'homium_model.pkl'
 }
 
-# Load the Vesta model
-vesta_model = load_model('vesta_model.pkl')
-
 # Streamlit app title and description
 st.title("Vesta ROI Prediction for Various Competitors")
 st.markdown("""
@@ -55,8 +52,8 @@ model_choice = st.selectbox("Select Competitor Model", list(models.keys()))
 # Load the selected competitor model
 competitor_model = load_model(models[model_choice])
 
-# Ensure both models are loaded
-if vesta_model and competitor_model:
+# Ensure the competitor model is loaded
+if competitor_model:
     # User inputs
     estimated_value = st.number_input('Estimated Property Value ($)', value=1000000)
     equity_value = st.number_input('Equity Value ($)', value=800000)
@@ -74,9 +71,12 @@ if vesta_model and competitor_model:
     else:
         hei_opportunity = 0
     
-    # Calculate Vesta Buyout (10 years)
+    # Static calculation for Vesta Buyout (10 years)
     vesta_buyout_10yr = ((1 - 0.15) * estimated_value) * (1 + 0.04) ** 10
     
+    # Static Vesta ROI calculation (this is a placeholder, modify based on your static calculation)
+    vesta_roi = vesta_buyout_10yr / estimated_value * 100  # Example formula
+
     # Function to calculate competitor buyout based on competitor
     def calculate_competitor_buyout(competitor, estimated_value):
         if competitor == 'HELOC ROI':
@@ -98,53 +98,19 @@ if vesta_model and competitor_model:
     # Calculate competitor buyout
     competitor_buyout_10yr = calculate_competitor_buyout(model_choice, estimated_value)
     
-    # Prepare data for Vesta model
-    vesta_data = pd.DataFrame({
+    # Prepare data for competitor model
+    competitor_data = pd.DataFrame({
         'Estimated_Value': [estimated_value],
         'Equity_Value': [equity_value],
         'HEI Opportunity': [hei_opportunity],
         'Morgage Balance': [mortgage_balance],
+        f"{model_choice}_Buyout_10yr": [competitor_buyout_10yr],
         'Vesta_Buyout_10yr': [vesta_buyout_10yr]
     })
-    
-    # Prepare data for competitor model
-    if model_choice == "HELOC ROI":
-        competitor_data = pd.DataFrame({
-            'Estimated_Value': [estimated_value],
-            'Equity_Value': [equity_value],
-            'HEI Opportunity': [hei_opportunity],
-            'Morgage Balance': [mortgage_balance],
-            'HELOC_Cost_10yr': [competitor_buyout_10yr],
-            'Vesta_Buyout_10yr': [vesta_buyout_10yr]
-        })
-    elif model_choice == "Reverse Mortgage":
-        competitor_data = pd.DataFrame({
-            'Estimated_Value': [estimated_value],
-            'Equity_Value': [equity_value],
-            'HEI Opportunity': [hei_opportunity],
-            'Morgage Balance': [mortgage_balance],
-            'Reverse_Mortgage_Cost_10yr': [competitor_buyout_10yr],
-            'Vesta_Buyout_10yr': [vesta_buyout_10yr]
-        })
-    # Add similar blocks for other competitors...
-    else:
-        # Generic case for other competitors
-        competitor_data = pd.DataFrame({
-            'Estimated_Value': [estimated_value],
-            'Equity_Value': [equity_value],
-            'HEI Opportunity': [hei_opportunity],
-            'Morgage Balance': [mortgage_balance],
-            f"{model_choice}_Buyout_10yr": [competitor_buyout_10yr],
-            'Vesta_Buyout_10yr': [vesta_buyout_10yr]
-        })
     
     # Predict and display results
     if st.button('Predict'):
         try:
-            # Vesta prediction
-            vesta_prediction = vesta_model.predict(vesta_data.values)
-            vesta_roi = vesta_prediction[0]
-            
             # Competitor prediction
             competitor_prediction = competitor_model.predict(competitor_data.values)
             competitor_roi = competitor_prediction[0]
@@ -152,14 +118,14 @@ if vesta_model and competitor_model:
             # Display predictions side by side
             col1, col2 = st.columns(2)
             with col1:
-                st.subheader("Vesta ROI Prediction")
-                st.success(f"Predicted ROI for Vesta: ${vesta_roi:,.2f}")
-                st.write("**Input Data:**")
-                st.write(vesta_data)
+                st.subheader("Vesta ROI Prediction (Static)")
+                st.success(f"Static ROI for Vesta: {vesta_roi:.2f}%")
+                st.write("**Input Data (Vesta):**")
+                st.write(f"Vesta Buyout (10 years): ${vesta_buyout_10yr:,.2f}")
             with col2:
                 st.subheader(f"{model_choice} ROI Prediction")
-                st.success(f"Predicted ROI for {model_choice}: ${competitor_roi:,.2f}")
-                st.write("**Input Data:**")
+                st.success(f"Predicted ROI for {model_choice}: {competitor_roi:.2f}%")
+                st.write("**Input Data (Competitor):**")
                 st.write(competitor_data)
             
             # Visualization side by side
@@ -170,7 +136,7 @@ if vesta_model and competitor_model:
                 values = [estimated_value, equity_value, hei_opportunity, mortgage_balance, vesta_roi]
                 fig_vesta = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.3)])
                 fig_vesta.update_layout(
-                    title_text="Vesta Metrics and Predicted ROI",
+                    title_text="Vesta Metrics and ROI",
                     annotations=[dict(text='Vesta', x=0.5, y=0.5, font_size=20, showarrow=False)]
                 )
                 st.plotly_chart(fig_vesta)
@@ -185,4 +151,4 @@ if vesta_model and competitor_model:
         except Exception as e:
             st.error(f"Error during prediction: {str(e)}")
 else:
-    st.error("Failed to load models. Please check the model files.")
+    st.error("Failed to load competitor models. Please check the model files.")
