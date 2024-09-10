@@ -76,7 +76,8 @@ if competitor_model:
     st.write(f"Calculated HEI Opportunity: ${hei_opportunity:,.2f}")
     
     # Static calculation for Vesta Buyout (10 years)
-    vesta_buyout_10yr = ((1 - 0.15) * estimated_value) * (1 + 0.04) ** 10
+    vesta_appreciated_10yr = (((1 - 0.15) * estimated_value) * (1 + 0.04) ** 10)
+    vesta_buyout_10yr = (percent_equity_access/100)*vesta_appreciated_10yr
     
     def calculate_competitor_buyout(competitor, estimated_value, hei_opportunity, equity_percent):
         try:
@@ -129,10 +130,10 @@ if competitor_model:
         try:
             # Competitor prediction
             competitor_prediction = competitor_model.predict(competitor_data.values)
-            competitor_roi = competitor_prediction[0]
+            competitor_roi = pd.to_numeric(competitor_prediction[0])
             
             # Static Vesta ROI calculation (this is a placeholder, modify based on your static calculation)
-            vesta_roi = vesta_buyout_10yr / estimated_value * 100  # Example formula
+            vesta_roi = vesta_appreciated_10yr - vesta_buyout_10yr
             
             # Display predictions side by side
             col1, col2 = st.columns(2)
@@ -155,7 +156,7 @@ if competitor_model:
                 values = [estimated_value, equity_value, hei_opportunity, mortgage_balance, vesta_roi]
                 fig_vesta = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.3)])
                 fig_vesta.update_layout(
-                    title_text="Vesta Metrics and Static ROI",
+                    title_text="Vesta Metrics and ROI",
                     annotations=[dict(text='Vesta', x=0.5, y=0.5, font_size=20, showarrow=False)]
                 )
                 st.plotly_chart(fig_vesta)
