@@ -61,9 +61,6 @@ if competitor_model:
     mortgage_balance = st.number_input('Mortgage Balance ($)', value=400000)
     percent_equity_access = st.number_input('Percent of Equity Access (%)', value=10.0)
     
-    # Access type selection
-    access_type = st.selectbox('Select Access Type', ['Equity Access', 'Mortgage Exit'])
-    
     # Validate that estimated value is greater than or equal to equity value
     if estimated_value < equity_value:
         st.error("Error: Estimated Property Value should be greater than or equal to Equity Value.")
@@ -78,19 +75,11 @@ if competitor_model:
             hei_opportunity = mortgage_balance
         else:
             hei_opportunity = 0
+        st.write(f"Calculated HEI Opportunity: ${hei_opportunity:,.2f}")
         
-        # Validate that HEI opportunity is not greater than equity value
-        if hei_opportunity > equity_value:
-            st.error("Error: HEI Opportunity cannot be greater than Equity Value.")
-        else:
-            # Display the calculated HEI Opportunity
-            st.write(f"Calculated HEI Opportunity: ${hei_opportunity:,.2f}")
-    
-            # Static calculation for Vesta Buyout (10 years)
-            vesta_appreciated_10yr = (((1 - 0.15) * estimated_value) * (1 + 0.04) ** 10)
-            vesta_buyout_10yr = (percent_equity_access/100)*vesta_appreciated_10yr
-            # Proceed with the rest of the calculations
-            st.write(f"Calculated HEI Opportunity: ${hei_opportunity:,.2f}")
+        #calculation for Vesta Buyout (10 years)
+        vesta_appreciated_10yr = (((1 - 0.15) * estimated_value) * (1 + 0.04) ** 10)
+        vesta_buyout_10yr = (percent_equity_access/100)*vesta_appreciated_10yr
 
     def calculate_competitor_buyout(competitor, estimated_value, hei_opportunity, equity_percent):
         try:
