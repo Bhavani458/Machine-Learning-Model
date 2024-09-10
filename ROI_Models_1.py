@@ -175,8 +175,8 @@ if competitor_model:
                 st.plotly_chart(fig_vesta)
             # Competitor Bar Chart
             with col2:
-                labels = [f'{model_choice} Predicted ROI']
-                values = [competitor_roi]  # Assuming you want to compare competitor and Vesta ROI
+                labels = [f'{model_choice} Predicted ROI', 'Vesta Predicted ROI']
+                values = [competitor_roi, vesta_roi]  # Assuming you want to compare competitor and Vesta ROI
 
                 # Create a pie chart for the competitor and Vesta ROI
                 fig_competitor = px.pie(
