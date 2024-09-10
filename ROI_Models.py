@@ -22,19 +22,11 @@ models = {
 }
 
 # Streamlit app title
-st.title("ROI Prediction for Different Competitors")
+st.title("Vesta ROI Prediction for Different Competitors")
 
 # Background information
 st.markdown("""
     ### Welcome to the Home Equity Investment (HEI) ROI Prediction Tool!
-    Use this tool to predict the potential return on investment(ROI) between **Vesta** and different home equity investment options like:
-    - **HELOC**
-    - **Reverse Mortgage**
-    - **Unison**
-    - **Point**
-    - **Haus**
-    - **Homium**
-    
     Select a competitor from the dropdown, enter the relevant details, and click **Predict** to get the estimated ROI.
 """)
 
@@ -125,9 +117,14 @@ if model:
             st.subheader("Input Data:")
             st.write(new_data)
 
-            # Add a simple bar chart visualization (if applicable)
+            # Visualization with Pie Chart including the Predicted Value
             st.subheader("Visualization of Key Metrics:")
-            st.bar_chart(new_data[['Estimated_Value', 'Equity_Value', 'HEI Opportunity', 'Mortgage Balance']])
+            fig, ax = plt.subplots()
+            labels = ['Estimated Value', 'Equity Value', 'HEI Opportunity', 'Mortgage Balance', 'Predicted ROI']
+            values = [estimated_value, equity_value, hei_opportunity, mortgage_balance, predicted_value]
+            ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
+            ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+            st.pyplot(fig)
 
         except Exception as e:
             st.error(f"Error during prediction: {str(e)}")
