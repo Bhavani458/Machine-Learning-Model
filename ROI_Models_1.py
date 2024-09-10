@@ -176,15 +176,14 @@ if competitor_model:
             # Competitor Bar Chart
             with col2:
                 # Create a bar chart to compare Vesta ROI and Competitor ROI
-                labels = ['Vesta ROI', f'{model_choice} Predicted ROI']
-                values = [vesta_roi, competitor_roi]
+                labels = [f'{model_choice} and Vesta Predicted ROI']
+                values = [competitor_roi]
 
                 fig_comparison = px.bar(
                     x=labels,
                     y=values,
                     labels={'x': 'Metrics', 'y': 'ROI ($)'},
-                    title=f"Cost Difference between Vesta and {model_choice}",
-                    text=values,  # Display the value on top of each bar
+                    title=f"Cost Difference between Vesta and {model_choice}"
                 )
                 # Update layout
                 fig_comparison.update_layout(
