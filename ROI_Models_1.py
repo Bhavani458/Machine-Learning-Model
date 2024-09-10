@@ -175,23 +175,25 @@ if competitor_model:
                 st.plotly_chart(fig_vesta)
             # Competitor Bar Chart
             with col2:
-                labels = [f'{model_choice} Predicted ROI', 'Vesta Predicted ROI']
-                values = [competitor_roi, vesta_roi]  # Assuming you want to compare competitor and Vesta ROI
+                # Create a bar chart to compare Vesta ROI and Competitor ROI
+                labels = ['Vesta ROI', f'{model_choice} Predicted ROI']
+                values = [vesta_roi, competitor_roi]
 
-                # Create a pie chart for the competitor and Vesta ROI
-                fig_competitor = px.pie(
-                    names=labels,  # Pie chart requires 'names' for labels
-                    values=values,  # Corresponding values for the slices
-                    title=f"{model_choice} and Vesta Predicted ROI"
+                fig_comparison = px.bar(
+                    x=labels,
+                    y=values,
+                    labels={'x': 'Metrics', 'y': 'ROI ($)'},
+                    title=f"Cost Difference between Vesta and {model_choice}",
+                    text=values,  # Display the value on top of each bar
                 )
-
-                # Update layout to set the title and display the chart
-                fig_competitor.update_layout(
-                    title_text=f"{model_choice} and Vesta Metrics, Predicted ROI",
+                # Update layout
+                fig_comparison.update_layout(
+                    xaxis_title="Metrics",
+                    yaxis_title="ROI ($)",
+                    title_text=f"Cost Difference between Vesta and {model_choice}"
                 )
-                # Display the chart in Streamlit
-                st.plotly_chart(fig_competitor)
-
+                # Display in Streamlit
+                st.plotly_chart(fig_comparison)
         except Exception as e:
             st.error(f"Error during prediction: {str(e)}")
 else:
