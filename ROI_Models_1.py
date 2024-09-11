@@ -154,7 +154,7 @@ if competitor_model:
             with col2:
                 st.subheader(f"Vesta and {model_choice} ROI Prediction")
                 if(competitor_roi<0):
-                    st.success(f"Predicted ROI for Vesta & {model_choice}:<span style='font-size:20px; font-weight:bold; color:red'>{competitor_roi:.2f}</span>",unsafe_allow_html=True)
+                    st.markdown(f"Predicted ROI for Vesta & {model_choice}:<span style='font-size:20px; font-weight:bold; color:red'>{competitor_roi:.2f}</span>",unsafe_allow_html=True)
                 else:
                     st.success(f"Predicted ROI for Vesta & {model_choice}: {competitor_roi:.2f}")
                 st.write(f"***Predicted ROI is the difference between costs associated with {model_choice} and Vesta***")
